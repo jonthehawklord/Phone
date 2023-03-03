@@ -90,6 +90,7 @@ app.post('/api/persons', (request, response, next) => {
 
   // All remaining requests return the React app, so it can handle routing.
   app.get('*', function(request, response) {
+	  console.log('here')
     response.sendFile(path.resolve(__dirname, '../react-ui/build', 'index.html'));
   }); 
 
