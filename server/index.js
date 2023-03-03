@@ -6,7 +6,10 @@ const app = express()
 
 app.use(cors())
 app.use(express.json())
-/* app.use(express.static('../react-ui/build')) */
+
+// Priority serve any static files.
+app.use(express.static(path.resolve(__dirname, '../react-ui/build')));
+
 app.use(morgan((tokens, req, res) => {
     return [
       tokens.method(req, res),
@@ -41,17 +44,14 @@ let persons = [
     }
   ]
 
-/* app.get('/', (request, response) => {
-  response.send('<h1>Hello World!</h1>')
-}) */
-
 app.get('/api/persons', (request, response) => {
+	console.log('In the get for api/persons all')
   response.json(persons)
 })
 
 app.get('/api/persons/:id', (request, response) => {
   const id = Number(request.params.id)
-  console.log(id)
+  console.log('In the get for api/persons',id)
   const person = persons.find(person => person.id === id)
   if (person) {
     response.json(person)
@@ -89,11 +89,17 @@ app.post('/api/persons', (request, response, next) => {
 	response.json(persons)
 })
 
-  // All remaining requests return the React app, so it can handle routing.
+  // Answer API requests.
+  app.get('/api', function (req, res) {
+    res.set('Content-Type', 'application/json');
+    res.send('{"message":"Hello from the custom server!"}');
+  });
+  
+ // All remaining requests return the React app, so it can handle routing.
   app.get('*', function(request, response) {
-	  console.log('here')
+	  console.log('Looking for the rest')
     response.sendFile(path.resolve(__dirname, '../react-ui/build', 'index.html'));
-  }); 
+  });
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT)
