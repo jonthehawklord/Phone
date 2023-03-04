@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node server",
     "dev": "nodemon server",
-    "build": "npm install && cd react-ui/ && npm install && npm run build"
+    "build": "cd react-ui/ && npm install && npm run build"
   },
   "cacheDirectories": [
     "node_modules",
